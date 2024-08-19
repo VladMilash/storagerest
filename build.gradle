@@ -1,0 +1,57 @@
+plugins {
+	id 'java'
+	id 'org.springframework.boot' version "$springBootVersion"
+	id 'io.spring.dependency-management' version "$dependencyManagementVersion"
+}
+
+group = 'com.mvo'
+version = '0.0.1-SNAPSHOT'
+
+java {
+	toolchain {
+		languageVersion = JavaLanguageVersion.of(21)
+	}
+}
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	implementation 'org.springframework.boot:spring-boot-starter-webflux'
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	implementation 'org.springframework.boot:spring-boot-starter-security'
+	implementation 'org.springframework.boot:spring-boot-starter-data-r2dbc'
+
+	implementation "dev.miku:r2dbc-mysql:$r2dbcMysqlVersion"
+	implementation "mysql:mysql-connector-java:$mysqlConnectorVersion"
+
+
+	implementation 'org.flywaydb:flyway-core'
+	implementation 'org.flywaydb:flyway-mysql'
+
+	implementation "com.amazonaws:aws-java-sdk-core:$amazonawsAwsJavSdkCoreVersion"
+	implementation "com.amazonaws:aws-java-sdk-s3:$amazonawsAwsJavaSdkS3Version"
+
+	implementation "com.google.code.findbugs:jsr305:$googleCodeFindbugsVersion"
+
+	implementation "org.mapstruct:mapstruct:$mapstructVersion"
+
+	implementation "io.jsonwebtoken:jjwt-api:$jsonwebtokenVersion"
+
+	implementation "javax.xml.bind:jaxb-api:$javaxVersion"
+
+	compileOnly "org.projectlombok:lombok:$lombokVersion"
+
+	compileOnly('org.projectlombok:lombok')
+	annotationProcessor "org.projectlombok:lombok"
+
+	annotationProcessor "org.mapstruct:mapstruct-processor:$mapstructVersion"
+
+	testImplementation 'io.projectreactor:reactor-test'
+	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+}
+
+tasks.named('test') {
+	useJUnitPlatform()
+}
