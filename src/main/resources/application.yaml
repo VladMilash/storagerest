@@ -7,6 +7,6 @@ spring:
     password: "|@8hq6^Ey"
   flyway:
     url: jdbc:mysql://localhost:3306/storage
-    locations: classpath:db/migration
+    locations: filesystem:src/main/resources/db/migration
     user: ${spring.r2dbc.username}
     password: ${spring.r2dbc.password}

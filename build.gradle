@@ -27,8 +27,9 @@ dependencies {
 	implementation "mysql:mysql-connector-java:$mysqlConnectorVersion"
 
 
-	implementation 'org.flywaydb:flyway-core'
-	implementation 'org.flywaydb:flyway-mysql'
+	implementation "org.flywaydb:flyway-core:$flywayCoreVersion"
+	implementation "org.flywaydb:flyway-mysql:$flywayMsqlVersion"
+
 
 	implementation "com.amazonaws:aws-java-sdk-core:$amazonawsAwsJavSdkCoreVersion"
 	implementation "com.amazonaws:aws-java-sdk-s3:$amazonawsAwsJavaSdkS3Version"
