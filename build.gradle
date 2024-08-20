@@ -43,8 +43,6 @@ dependencies {
 	implementation "javax.xml.bind:jaxb-api:$javaxVersion"
 
 	compileOnly "org.projectlombok:lombok:$lombokVersion"
-
-	compileOnly('org.projectlombok:lombok')
 	annotationProcessor "org.projectlombok:lombok"
 
 	annotationProcessor "org.mapstruct:mapstruct-processor:$mapstructVersion"

@@ -16,6 +16,7 @@ CREATE TABLE file
 
 CREATE TABLE event
 (
+    id     INT AUTO_INCREMENT PRIMARY KEY,
     status VARCHAR(50) NOT NULL,
     user_id INT,
     file_id INT,
