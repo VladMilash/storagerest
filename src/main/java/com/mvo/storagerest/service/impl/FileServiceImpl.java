@@ -1,6 +1,7 @@
 package com.mvo.storagerest.service.impl;
 
 import com.amazonaws.services.s3.model.ObjectMetadata;
+import com.amazonaws.services.s3.model.S3Object;
 import com.mvo.storagerest.entity.Event;
 import com.mvo.storagerest.entity.File;
 import com.mvo.storagerest.entity.Status;
@@ -88,5 +89,11 @@ public class FileServiceImpl implements FileService {
                         }))
                 )
                 .then();
+    }
+
+    @Override
+    public Mono<S3Object> downloadFile(String bucketName, String objectName, Long fileId) {
+        return fileRepository.findById(fileId)
+                .flatMap(file -> fileStorageService.downloadFile(bucketName,objectName));
     }
 }

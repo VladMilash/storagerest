@@ -13,14 +13,10 @@ import reactor.core.scheduler.Schedulers;
 import java.io.InputStream;
 
 @Service
+@RequiredArgsConstructor
 public class FileStorageServiceImpl implements FileStorageService {
 
     private final AmazonS3 amazonS3;
-
-    @Autowired
-    public FileStorageServiceImpl(AmazonS3 amazonS3) {
-        this.amazonS3 = amazonS3;
-    }
 
     public Mono<String> uploadFile(String bucketName, String objectName, InputStream inputStream, ObjectMetadata metadata) {
         return Mono.fromCallable(() -> {
