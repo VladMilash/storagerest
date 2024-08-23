@@ -5,4 +5,5 @@ import reactor.core.publisher.Mono;
 
 public interface UserService extends GenericEntityService<User, Long> {
     Mono<User> findByUserName(String userName);
+    Mono<User> registerUser(User user);
 }
