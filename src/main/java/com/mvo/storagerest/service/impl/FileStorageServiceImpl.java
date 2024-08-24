@@ -5,13 +5,14 @@ import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.S3Object;
 import com.mvo.storagerest.service.FileStorageService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Schedulers;
 
 import java.io.InputStream;
 
+@Log4j2
 @Service
 @RequiredArgsConstructor
 public class FileStorageServiceImpl implements FileStorageService {
@@ -22,8 +23,10 @@ public class FileStorageServiceImpl implements FileStorageService {
         return Mono.fromCallable(() -> {
             try (inputStream) {
                 amazonS3.putObject(bucketName, objectName, inputStream, metadata);
+                log.info("Successfully uploaded file to S3 with object name: {}", objectName);
                 return objectName;
             } catch (Exception e) {
+                log.error("Error uploading file to S3 with object name: {}", objectName, e);
                 throw new RuntimeException("Error uploading file to S3", e);
             }
         }).subscribeOn(Schedulers.boundedElastic());
@@ -32,8 +35,11 @@ public class FileStorageServiceImpl implements FileStorageService {
     public Mono<S3Object> downloadFile(String bucketName, String objectName) {
         return Mono.fromCallable(() -> {
             try {
-                return amazonS3.getObject(bucketName, objectName);
+                S3Object s3Object = amazonS3.getObject(bucketName, objectName);
+                log.info("Successfully downloaded file from S3 with object name: {}", objectName);
+                return s3Object;
             } catch (Exception e) {
+                log.error("Error downloading file from S3 with object name: {}", objectName, e);
                 throw new RuntimeException("Error downloading file from S3", e);
             }
         }).subscribeOn(Schedulers.boundedElastic());
@@ -43,7 +49,9 @@ public class FileStorageServiceImpl implements FileStorageService {
         return Mono.fromRunnable(() -> {
             try {
                 amazonS3.deleteObject(bucketName, objectName);
+                log.info("Successfully deleted file from S3 with object name: {}", objectName);
             } catch (Exception e) {
+                log.error("Error deleting file from S3 with object name: {}", objectName, e);
                 throw new RuntimeException("Error deleting file from S3", e);
             }
         }).subscribeOn(Schedulers.boundedElastic()).then();

@@ -21,60 +21,73 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Mono<User> findByUsername(String username) {
-        return userRepository.findByUserName(username);
+        return userRepository.findByUserName(username)
+                .doOnSuccess(user -> log.info("User with username {} has been finding successfully", username))
+                .doOnError(error -> log.error("Failed to find user with username {}", username, error));
     }
 
     @Override
     public Mono<User> getById(Long id) {
-        return userRepository.findById(id);
+        return userRepository.findById(id)
+                .doOnSuccess(user -> log.info("User with id {} has been finding successfully", id))
+                .doOnError(error -> log.error("Failed to finding user with id {}", id, error));
     }
 
     @Override
     public Flux<User> getAll() {
-        return userRepository.findAll();
+        return userRepository.findAll()
+                .doOnNext(user -> log.info("Users has been finding successfully"))
+                .doOnError(error -> log.error("Failed to finding users", error));
     }
 
     @Override
     public Mono<User> save(User entity) {
-        return userRepository.save(entity);
+        return userRepository.save(entity)
+                .doOnSuccess(user -> log.info("User with id {} has been saved successfully", user.getId()))
+                .doOnError(error -> log.error("Failed to saving user", error));
     }
 
     @Override
     public Mono<User> update(User entity) {
         return userRepository.findById(entity.getId())
                 .map(user -> {
+                    log.info("Updating user with id {}", user.getId());
                     user.setUserName(entity.getUserName());
                     user.setRole(entity.getRole());
                     user.setStatus(entity.getStatus());
-                    user.setPassword(entity.getPassword());
-//                    user.setEvents(entity.getEvents());
+                    if (!user.getPassword().equals(entity.getPassword())) {
+                        log.info("Password for user with id {} is being changed", entity.getId());
+                        user.setPassword(passwordEncoder.encode(entity.getPassword()));
+                    }
                     return user;
                 })
-                .flatMap(userRepository::save);
+                .flatMap(userRepository::save)
+                .doOnSuccess(user -> log.info("User with id {} has been updated successfully", user.getId()))
+                .doOnError(error -> log.error("Failed to update user with id {}", entity.getId(), error));
     }
 
     @Override
     public Mono<Void> deleteById(Long id) {
-        return userRepository.deleteById(id);
+        return userRepository.deleteById(id)
+                .doOnSuccess(aVoid -> log.info("User with id {} has been deleted successfully", id))
+                .doOnError(error -> log.error("Failed to deleted user with id {}", id, error));
     }
 
     @Override
     public Mono<User> registerUser(User user) {
         return userRepository.save(
-                user.toBuilder()
-                        .password(passwordEncoder.encode(user.getPassword()))
-                        .role(UserRole.USER)
-                        .status(Status.ACTIVE)
-                        .build()
-        ).doOnSuccess(u -> {
-            log.info("In registerUser- user: {} created", u);
-        });
+                        user.toBuilder()
+                                .password(passwordEncoder.encode(user.getPassword()))
+                                .role(UserRole.USER)
+                                .status(Status.ACTIVE)
+                                .build())
+                .doOnSuccess(u -> log.info("User with id {} has been registered successfully", u.getId()))
+                .doOnError(error -> log.error("Failed to register user with id {}", user.getId(), error));
     }
 
     @Override
     public Mono<User> deactivateUser(Long id) {
         return userRepository.findById(id)
-                .switchIfEmpty(Mono.error(new RuntimeException("User not found with id: " + id)))
                 .flatMap(user -> {
                     user.setStatus(Status.DELETED);
                     return userRepository.save(user);

@@ -27,6 +27,4 @@ public class Event {
     @Column("file_id")
     private Long fileId;
 
-
-
 }
