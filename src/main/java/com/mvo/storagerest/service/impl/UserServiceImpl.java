@@ -4,7 +4,6 @@ import com.mvo.storagerest.entity.Status;
 import com.mvo.storagerest.entity.User;
 import com.mvo.storagerest.entity.UserRole;
 import com.mvo.storagerest.repository.UserRepository;
-import com.mvo.storagerest.security.PBFDK2Encoder;
 import com.mvo.storagerest.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,8 +20,8 @@ public class UserServiceImpl implements UserService {
     private final PasswordEncoder passwordEncoder;
 
     @Override
-    public Mono<User> findByUserName(String userName) {
-        return userRepository.findByUserName(userName);
+    public Mono<User> findByUsername(String username) {
+        return userRepository.findByUserName(username);
     }
 
     @Override
@@ -48,7 +47,7 @@ public class UserServiceImpl implements UserService {
                     user.setRole(entity.getRole());
                     user.setStatus(entity.getStatus());
                     user.setPassword(entity.getPassword());
-                    user.setEvents(entity.getEvents());
+//                    user.setEvents(entity.getEvents());
                     return user;
                 })
                 .flatMap(userRepository::save);
@@ -72,4 +71,15 @@ public class UserServiceImpl implements UserService {
         });
     }
 
+    @Override
+    public Mono<User> deactivateUser(Long id) {
+        return userRepository.findById(id)
+                .switchIfEmpty(Mono.error(new RuntimeException("User not found with id: " + id)))
+                .flatMap(user -> {
+                    user.setStatus(Status.DELETED);
+                    return userRepository.save(user);
+                })
+                .doOnSuccess(user -> log.info("User with id {} has been deactivated", id))
+                .doOnError(error -> log.error("Failed to deactivate user with id {}", id, error));
+    }
 }

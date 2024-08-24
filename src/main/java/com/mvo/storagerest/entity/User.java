@@ -31,8 +31,8 @@ public class User {
     @Column("role")
     private UserRole role;
 
-    @MappedCollection(idColumn = "user_id")
-    @ToString.Exclude
-    private List<Event> events;
+//    @MappedCollection(idColumn = "user_id")
+//    @ToString.Exclude
+//    private List<Event> events;
 
 }

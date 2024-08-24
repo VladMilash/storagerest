@@ -62,7 +62,7 @@ public class SecurityService {
     }
 
     public Mono<TokenDetails> authenticate(String username, String password) {
-        return userService.findByUserName(username)
+        return userService.findByUsername(username)
                 .flatMap(user -> {
                     if (user.getStatus().equals(Status.DELETED)) {
                         return Mono.error(new AuthException("Account disabled", "MVO_USER_ACCOUNT_DISABLED"));
@@ -77,7 +77,7 @@ public class SecurityService {
                             .build());
 
                 })
-                .switchIfEmpty(Mono.error(new AuthException("Invalid username", "MVO    _INVALID_USERNAME")));
+                .switchIfEmpty(Mono.error(new AuthException("Invalid username", "MVO_INVALID_USERNAME")));
     }
 
 }

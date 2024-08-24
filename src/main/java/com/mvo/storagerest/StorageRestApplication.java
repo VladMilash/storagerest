@@ -9,5 +9,4 @@ public class StorageRestApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(StorageRestApplication.class, args);
 	}
-
 }

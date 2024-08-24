@@ -40,6 +40,10 @@ dependencies {
 
 	implementation "io.jsonwebtoken:jjwt-api:$jsonwebtokenVersion"
 
+	runtimeOnly "io.jsonwebtoken:jjwt-impl:$jsonwebtokenVersion"
+	runtimeOnly "io.jsonwebtoken:jjwt-jackson:$jsonwebtokenVersion"
+
+
 	implementation "javax.xml.bind:jaxb-api:$javaxVersion"
 
 	compileOnly "org.projectlombok:lombok:$lombokVersion"
