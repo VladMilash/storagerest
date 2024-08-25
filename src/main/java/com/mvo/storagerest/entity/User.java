@@ -1,10 +1,8 @@
 package com.mvo.storagerest.entity;
 
 import lombok.*;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Column;
-import org.springframework.data.relational.core.mapping.MappedCollection;
 import org.springframework.data.relational.core.mapping.Table;
 
 import java.util.List;
@@ -30,9 +28,5 @@ public class User {
 
     @Column("role")
     private UserRole role;
-
-//    @MappedCollection(idColumn = "user_id")
-//    @ToString.Exclude
-//    private List<Event> events;
 
 }

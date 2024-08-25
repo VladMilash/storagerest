@@ -16,7 +16,7 @@ import org.springframework.data.relational.core.mapping.Table;
 public class Event {
 
     @Id
-    private long id;
+    private Long id;
 
     @Column("status")
     private Status status;

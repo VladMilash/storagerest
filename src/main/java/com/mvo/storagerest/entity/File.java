@@ -15,7 +15,7 @@ import org.springframework.data.relational.core.mapping.Table;
 @Table("file")
 public class File {
     @Id
-    private long id;
+    private Long id;
 
     @Column("location")
     private String location;
