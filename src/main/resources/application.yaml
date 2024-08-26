@@ -10,3 +10,16 @@ spring:
     locations: filesystem:src/main/resources/db/migration
     user: ${spring.r2dbc.username}
     password: ${spring.r2dbc.password}
+yandex:
+  storage:
+    accessKey: ${YANDEX_STORAGE_ACCESS_KEY}
+    secretKey: ${YANDEX_STORAGE_SECRET_KEY}
+jwt:
+  password:
+    encoder:
+      secret: XcD2vOwm1crljs3NgkTL95uW8sY0rULjzmG6jPWTK78=
+      iteration: 64
+      keyLength: 256
+  secret: XcD2vOwm1crljs3NgkTL95uW8sY0rULjzmG6jPWTK68=
+  expiration: 3600
+  issuer: mvo
